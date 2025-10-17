@@ -8,8 +8,8 @@ without argument and returning an error:
 
 ```go
 func DEMO00_logscale() error {
-	fmt.Println("Executing demo DEMO00_logscale")
-	return nil
+    fmt.Println("Executing demo DEMO00_logscale")
+    return nil
 }
 ```
 
@@ -22,15 +22,15 @@ applet.NewExample("D01", "son de quintes", DEMO01_quintes)
 ...
 ```
 
-And finaly, the main function just execute a main function that let the
-user choose one of the demonstrative example:
+And finaly, the main function should execute the `StartExampleApp`:
 
 ```go
 applet.StartExampleApp("D01") // set D01 to be the default example to run
 ```
 
-If the name of your executable program is `mydemo`, then you can see the
-list of the demonstrative example with:
+This function parses the command line arguments and executes the
+selection made by the user. If the name of your executable program is
+`mydemo`, then you can see the list of the demonstrative examples with:
 
 ```shell
 ./mydemo -l

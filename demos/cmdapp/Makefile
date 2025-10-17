@@ -1,8 +1,8 @@
 all: test
 
 test: build
-	@./application -l
-	@./application -n D01
+	@./cmdapp -l
+	@./cmdapp -n D01
 
 build:
 	@go build

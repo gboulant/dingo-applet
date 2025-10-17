@@ -20,6 +20,8 @@ type Example struct {
 	Comment string
 }
 
+// String return a on-line string representation of the Example, can be
+// used for listing the examples
 func (u Example) String() string {
 	return fmt.Sprintf("%-14s (%s)", u.Name, u.Comment)
 }
@@ -35,6 +37,7 @@ func NewExample(name string, comment string, function func() error) *Example {
 	return &p
 }
 
+// GetExample returns an Example selected by its identifier name
 func GetExample(name string) (*Example, error) {
 	for _, example := range examples {
 		if example.Name == name {
@@ -44,12 +47,17 @@ func GetExample(name string) (*Example, error) {
 	return nil, fmt.Errorf("no example program with name %s", name)
 }
 
+// ListExamples prints on the standar output the list of examples
+// registered with NewExample
 func ListExamples() {
 	for _, example := range examples {
 		fmt.Println(example)
 	}
 }
 
+// StartExampleApp parses the command line arguments and execute the
+// selected example if specified, or print the list of examples if the
+// option -l is specified.
 func StartExampleApp(defaultExampleName string) {
 	var listExamples bool
 	var exampleName string
@@ -73,5 +81,4 @@ func StartExampleApp(defaultExampleName string) {
 		fmt.Fprintf(os.Stderr, "error: %s\n", err)
 		os.Exit(1)
 	}
-
 }
