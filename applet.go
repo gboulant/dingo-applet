@@ -37,6 +37,14 @@ func NewExample(name string, comment string, function func() error) *Example {
 	return &p
 }
 
+func GetExampleNames() []string {
+	names := make([]string, len(examples))
+	for i, example := range examples {
+		names[i] = example.Name
+	}
+	return names
+}
+
 // GetExample returns an Example selected by its identifier name
 func GetExample(name string) (*Example, error) {
 	for _, example := range examples {
