@@ -6,48 +6,44 @@ import (
 	"os"
 )
 
-// --------------------------------------------------------------------
-// The Example structure can be used to defined a set of demonstrative
-// examples in a executable program (see the usage in the executable
-// programs of the folder cmds, e.g. the program cmds/examples).
-
-// Example defines a data structure to describe a demonstration
-// procedure and then execute this use case. Set the Execute attribute
-// to the function to execute.
-type Example struct {
+// Applet defines a data structure to describe a little executable procedure
+type Applet struct {
 	Name    string
 	Execute func() error
 	Comment string
 }
 
-// String return a on-line string representation of the Example, can be
-// used for listing the examples
-func (u Example) String() string {
-	return fmt.Sprintf("%-14s (%s)", u.Name, u.Comment)
+// String return a on-line string representation of the Applet. It can
+// be used for listing the applets
+func (p Applet) String() string {
+	return fmt.Sprintf("%-14s (%s)", p.Name, p.Comment)
 }
 
-var examples []Example
+var applets []Applet
 
-// NewExample creates a new Example program and registers the created
-// program into the catalog of programs. After this registration, the
-// example program can be obtain by name using the function GetExample
-func NewExample(name string, comment string, function func() error) *Example {
-	p := Example{name, function, comment}
-	examples = append(examples, p)
+// AddApplet creates a new Applet program and registers the created
+// program into the catalog of applets. After this registration, the
+// applet program can be obtain from ist name using the function
+// GetApplet
+func AddApplet(name string, comment string, function func() error) *Applet {
+	p := Applet{name, function, comment}
+	applets = append(applets, p)
 	return &p
 }
 
-func GetExampleNames() []string {
-	names := make([]string, len(examples))
-	for i, example := range examples {
-		names[i] = example.Name
+func GetAppletNames() []string {
+	names := make([]string, len(applets))
+	for i, p := range applets {
+		names[i] = p.Name
 	}
 	return names
 }
 
-// GetExample returns an Example selected by its identifier name
-func GetExample(name string) (*Example, error) {
-	for _, example := range examples {
+// GetApplet returns (if exists) the Applet selected by its identifier
+// name, return nil and an error if no applet is register with this
+// name.
+func GetApplet(name string) (*Applet, error) {
+	for _, example := range applets {
 		if example.Name == name {
 			return &example, nil
 		}
@@ -55,37 +51,37 @@ func GetExample(name string) (*Example, error) {
 	return nil, fmt.Errorf("no example program with name %s", name)
 }
 
-// ListExamples prints on the standar output the list of examples
-// registered with NewExample
-func ListExamples() {
-	for _, example := range examples {
-		fmt.Println(example)
+// ListApplets prints on the standard output the list of applets
+// registered with AddApplet
+func ListApplets() {
+	for _, p := range applets {
+		fmt.Println(p)
 	}
 }
 
-// StartExampleApp parses the command line arguments and execute the
-// selected example if specified, or print the list of examples if the
+// StartApplication parses the command line arguments and execute the
+// selected applet if specified, or print the list of applets if the
 // option -l is specified.
-func StartExampleApp(defaultExampleName string) {
-	var listExamples bool
-	var exampleName string
-	flag.BoolVar(&listExamples, "l", false, "list of demo examples")
-	flag.StringVar(&exampleName, "n", defaultExampleName, "name of the demo example to execute")
+func StartApplication(defaultAppletName string) {
+	var listApplets bool
+	var appletName string
+	flag.BoolVar(&listApplets, "l", false, "list the applets")
+	flag.StringVar(&appletName, "n", defaultAppletName, "name of the applet to execute")
 	flag.Parse()
 
-	if listExamples {
-		ListExamples()
+	if listApplets {
+		ListApplets()
 		os.Exit(0)
 	}
 
-	example, err := GetExample(exampleName)
+	p, err := GetApplet(appletName)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error: %s\n", err)
 		os.Exit(1)
 	}
 
-	fmt.Printf("Executing demo %s ...\n", example.Name)
-	if err := example.Execute(); err != nil {
+	fmt.Printf("Executing applet %s ...\n", p.Name)
+	if err := p.Execute(); err != nil {
 		fmt.Fprintf(os.Stderr, "error: %s\n", err)
 		os.Exit(1)
 	}
