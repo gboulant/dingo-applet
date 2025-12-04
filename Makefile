@@ -1,10 +1,12 @@
-all:
+all: test
 
-test:
-	@make -C demos/cmdapp $@
+demos.%:
+	@make -C demos/d01.basic $*
+	@make -C demos/d02.applet $*
 
-clean:
-	@make -C demos/cmdapp $@
+test: demos.test
+
+clean: demos.clean
 	@rm -f output.*
 
 cov:
